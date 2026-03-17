@@ -240,8 +240,11 @@ export default function Home() {
   const isMobileViewport = typeof window !== "undefined" && window.innerWidth <= 768;
 
   const currentSequenceImage = useMemo(() => {
-    if (!currentRound) return "";
-    return currentRound[sequence[sequenceIndex]?.key] || "";
+    if (!currentRound) return null;
+    if (sequenceIndex < 0 || sequenceIndex >= sequence.length) return null;
+
+    const key = sequence[sequenceIndex]?.key;
+    return key ? currentRound[key] || null : null;
   }, [currentRound, sequenceIndex]);
 
   const clearAllTimers = () => {
@@ -396,7 +399,7 @@ export default function Home() {
       <div style={styles.container}>
         <header style={styles.header}>
           <div>
-            <h1 style={styles.title}>Reconociendo el borneo</h1>
+            <h1 style={styles.title}>Juego de borneos</h1>
             <p style={styles.subtitle}>Entrenamiento visual para interpretación de rotación del viento</p>
           </div>
           <div style={styles.badges}>
@@ -434,7 +437,7 @@ export default function Home() {
           </section>
         )}
 
-        {screen === "secuencia" && currentRound && (
+        {screen === "secuencia" && currentRound && currentSequenceImage && (
           <section ref={imageSectionRef} style={styles.card}>
             <div style={styles.imageWrap}>
               <img
